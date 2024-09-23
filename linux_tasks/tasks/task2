@@ -1,0 +1,46 @@
+#!/bin/bash
+
+mkdir /tmp/a
+dir=/tmp/a
+archive_dir=$1 # provide archive as a input
+
+# unzipping given zip file to /tmp/
+unzip -o "$archive_dir" -d "$dir"
+i=2
+
+# while we see a word 'not empty' we will unzip
+while grep -r "not empty" "$dir"
+do
+    unzip -o "$dir/archive_$i.zip" -d "$dir"
+	rm "$dir/archive_$((i-1)).zip" && rm "$dir/empty.txt"
+	((i++))
+done
+
+# output of a sercet word
+cat "$dir"/*.txt
+
+# inputting a new secret word
+for file in "$dir"/*.txt; do
+    echo 'CodeWord_22B031110' > "$file"
+done
+
+# archiving a new secret word with counter num
+cd $dir
+zip "archive_$i.zip" *
+(( i-- ))
+
+# creating an empty file for archiving
+echo "not empty" > empty.txt
+
+# counting to 0 to archive again
+while [[ $i -gt 0 ]]
+do
+	zip "archive_$i.zip" archive_$((i+1)).zip empty_file
+	rm "archive_$((i+1)).zip"
+	(( i-- ))
+done
+
+# replacing it with a old archive
+cd && mv $dir/archive_1.zip $archive_dir
+
+

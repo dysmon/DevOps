@@ -1,0 +1,22 @@
+#!/bin/bash
+
+service_name=$1
+
+sudo mkdir -p /home/logs
+sudo chmod 755 /home/logs
+
+{
+	$service_name | sudo tee -a /home/logs/app.log 2>&1
+} &
+
+echo "/home/logs/app.log {
+    size 1M
+    rotate 3
+    compress
+    missingok
+    notifempty
+    create 0640 root root
+    postrotate
+        echo \"\$(date) - Log rotated\" >> /home/log_rotates.log
+    endscript
+}" | sudo tee /etc/logrotate.d/web-service-gin > /dev/null

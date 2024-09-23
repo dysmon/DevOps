@@ -1,0 +1,4 @@
+#!/bin/bash
+
+du -h /home | sort -hr | head -n 5
+

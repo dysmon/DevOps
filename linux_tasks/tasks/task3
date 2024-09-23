@@ -1,0 +1,17 @@
+#!/bin/bash
+
+username=$1
+remote_host=$2
+key_path="$HOME/.ssh/id_rsa"
+
+# 1. Generate an SSH key pair on the local machine (if it doesn’t exist)
+if [[ ! -f ~/.ssh/id_rsa ]]
+then
+	ssh-keygen -t rsa -b 4096 -N "" -f "$key_path"
+fi
+
+# 2. Copy the public key to the remote server
+ssh-copy-id "$username@$remote_host"
+
+# 3. Ensure the proper permissions and setup on the remote server for key-based authentication
+ssh "$username@$remote_host" 'chmod -R 700 ~/.ssh'

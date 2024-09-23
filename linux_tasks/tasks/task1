@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# space complexity = O(n)
+# time complexity = O(n)
+
+declare -A file_hashes
+
+unzip $1
+search_dir=./duplicate_files
+
+for file in "$search_dir"/*; do
+        hash="$(sha256sum "$file" | awk '{print $1}')"
+        
+        if [[ -n "${file_hashes["$hash"]}" ]]; then
+            rm $file
+        else
+        	file_hashes["$hash"]="$file"
+        fi
+done
+

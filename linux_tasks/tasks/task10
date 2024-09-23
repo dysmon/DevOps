@@ -1,0 +1,6 @@
+#!/bin/bash
+
+app_ip=$1
+domain=$2
+
+echo $1 $2 | sudo tee -a /etc/hosts

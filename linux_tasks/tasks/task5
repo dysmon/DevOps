@@ -1,0 +1,27 @@
+#!/bin/bash
+
+service_name=$1
+
+echo "
+[Unit]
+Description=Web Service API
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/$service_name
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/home/logs/app.log
+StandardError=append:/home/logs/app.log
+
+[Install]
+WantedBy=multi-user.target
+" | sudo tee /etc/systemd/system/$service_name.service
+
+sudo chmod +x /etc/systemd/system/$service_name.service
+
+sudo systemctl daemon-reload
+sudo systemctl enable $service_name.service
+sudo systemctl start $service_name.service
+
