@@ -25,7 +25,7 @@ task1:
 task2:
 	@bash $(SCRIPT_DIR)/task2 ./assets/archive_1.zip
 task3:
-	@bash $(SCRIPT_DIR)/task3 username hostname
+	@bash $(SCRIPT_DIR)/task3 dias 192.168.1.17
 task4:
 	@bash $(SCRIPT_DIR)/task4 web-service-gin
 task5:
@@ -40,7 +40,7 @@ task8:
 task9:
 	@bash $(SCRIPT_DIR)/task9
 task10:
-	@bash $(SCRIPT_DIR)/task10 127.0.0.1 myapp
+	@bash $(SCRIPT_DIR)/task10 192.168.1.17 web-server
 task11:
 	@bash $(SCRIPT_DIR)/task11
 	
