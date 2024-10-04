@@ -29,11 +29,11 @@ task3:
 task4:
 	@bash $(SCRIPT_DIR)/task4 web-service-gin
 task5:
-	@bash $(SCRIPT_DIR)/task5 web-service-gin
+	@bash $(SCRIPT_DIR)/task5 web-service-gin dev
 task6:
 	@bash $(SCRIPT_DIR)/task6
 task7:
-	@bash $(SCRIPT_DIR)/task7
+	@bash $(SCRIPT_DIR)/task7 dev
 task8:
 	@bash $(SCRIPT_DIR)/task8 ./assets/example.nomad $(job_name)
 	# pass your value as job_name=example
