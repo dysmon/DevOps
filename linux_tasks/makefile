@@ -27,7 +27,7 @@ task2:
 task3:
 	@bash $(SCRIPT_DIR)/task3 dias 192.168.1.17
 task4:
-	@bash $(SCRIPT_DIR)/task4 web-service-gin
+	@sudo bash $(SCRIPT_DIR)/task4 web-service-gin
 task5:
 	@bash $(SCRIPT_DIR)/task5 web-service-gin dev
 task6:
