@@ -81,14 +81,3 @@ EXPOSE 8080
 # Start the Aiohttp server
 ENTRYPOINT ["python", "app/main.py"]
 ```
-
-## Key Considerations
-
-- **Minimizing Image Size**: By using a multi-stage build and minimal base images (`slim` for the build and `alpine` for the runtime), the image size is kept minimal without compromising functionality.
-- **Efficient Layer Management**: Combining commands like `apt-get update` and installation in one step, and removing the cache ensures layers are optimized.
-- **Security**: The image does not include unnecessary tools or packages, reducing potential vulnerabilities.
-- **Performance**: By minimizing the size and number of dependencies, the container starts and runs efficiently.
-
-## Conclusion
-
-This Dockerfile efficiently builds and runs an Aiohttp server following industry best practices for writing Dockerfiles. It ensures that the final image is as small and secure as possible, while still maintaining the functionality required to run the application.
