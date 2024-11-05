@@ -16,7 +16,8 @@ register_runner() {
 	  --url "$URL" \
 	  --token "$RUNNER_TOKEN" \	
 	  --executor "shell" \
-	  --description "gitlab-runner"  
+	  --description "gitlab-runner" \
+	  --tag-list "shared"
 }
 
 register_runner
