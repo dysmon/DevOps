@@ -7,6 +7,9 @@ This repository contains three Bash scripts to help you manage the installation,
 
 This script installs GitLab Runner and enables it to start automatically on system boot.
 
+### Prerequisites:
+- You need `sudo` privileges to run this script as it installs packages and enables services.
+
 ### Usage:
 
 ```bash
@@ -19,12 +22,13 @@ This script installs GitLab Runner and enables it to start automatically on syst
 - Installs GitLab Runner if it's not already installed.
 - Starts and enables the GitLab Runner service to start automatically on system boot.
 
-### Prerequisites:
-- You need `sudo` privileges to run this script as it installs packages and enables services.
-
 ## 2. `register_gitlab_runner.sh`
 
 This script registers a GitLab Runner to a specific GitLab instance.
+
+### Prerequisites:
+- Ensure you have `jq` installed for parsing JSON responses.
+- You need to add your valid `ACCESS_TOKEN` to ENV values to interact with the GitLab API.
 
 ### Usage:
 
@@ -39,10 +43,6 @@ Where `<url>` is the GitLab instance URL (e.g., `https://gitlab.com/`).
 - Uses the generated runner token via GitLab API (you may need to update `ACCESS_TOKEN` and `group_id` in the script).
 - Configures the runner to use the `shell` executor.
 
-### Prerequisites:
-- Ensure you have `jq` installed for parsing JSON responses.
-- You need to add your valid `ACCESS_TOKEN` to ENV values to interact with the GitLab API.
-
 ### Example:
 
 ```bash
@@ -52,6 +52,9 @@ Where `<url>` is the GitLab instance URL (e.g., `https://gitlab.com/`).
 ## 3. `clean.sh`
 
 This script stops, unregisters, and removes the GitLab Runner from your system.
+
+### Prerequisites:
+- You need `sudo` privileges as it performs system-wide modifications.
 
 ### Usage:
 
@@ -65,5 +68,3 @@ This script stops, unregisters, and removes the GitLab Runner from your system.
 - Removes GitLab Runner along with its configuration files.
 - Deletes the `gitlab-runner` user.
 
-### Prerequisites:
-- You need `sudo` privileges as it performs system-wide modifications.
