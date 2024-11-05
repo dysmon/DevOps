@@ -20,7 +20,7 @@ This script installs GitLab Runner and enables it to start automatically on syst
 - Starts and enables the GitLab Runner service to start automatically on system boot.
 
 ### Prerequisites:
-- You need \`sudo\` privileges to run this script as it installs packages and enables services.
+- You need `sudo` privileges to run this script as it installs packages and enables services.
 
 ## 2. `register_gitlab_runner.sh`
 
@@ -32,16 +32,16 @@ This script registers a GitLab Runner to a specific GitLab instance.
 ./register_gitlab_runner.sh <url>
 ```
 
-Where \`<url>\` is the GitLab instance URL (e.g., \`https://gitlab.com/\`).
+Where `<url>` is the GitLab instance URL (e.g., `https://gitlab.com/`).
 
 ### What it does:
 - Registers a GitLab Runner non-interactively with the specified GitLab instance.
-- Uses the generated runner token via GitLab API (you may need to update \`ACCESS_TOKEN\` and \`group_id\` in the script).
-- Configures the runner to use the \`shell\` executor.
+- Uses the generated runner token via GitLab API (you may need to update `ACCESS_TOKEN` and `group_id` in the script).
+- Configures the runner to use the `shell` executor.
 
 ### Prerequisites:
-- Ensure you have \`jq\` installed for parsing JSON responses.
-- You need to add your valid \`ACCESS_TOKEN\` to ENV values to interact with the GitLab API.
+- Ensure you have `jq` installed for parsing JSON responses.
+- You need to add your valid `ACCESS_TOKEN` to ENV values to interact with the GitLab API.
 
 ### Example:
 
@@ -63,7 +63,7 @@ This script stops, unregisters, and removes the GitLab Runner from your system.
 - Stops the GitLab Runner service.
 - Unregisters all runners associated with the system.
 - Removes GitLab Runner along with its configuration files.
-- Deletes the \`gitlab-runner\` user.
+- Deletes the `gitlab-runner` user.
 
 ### Prerequisites:
-- You need \`sudo\` privileges as it performs system-wide modifications.
+- You need `sudo` privileges as it performs system-wide modifications.
