@@ -9,9 +9,9 @@ This script installs GitLab Runner and enables it to start automatically on syst
 
 ### Usage:
 
-\`\`\`bash
+```bash
 ./install_gitlab_runner.sh
-\`\`\`
+```
 
 ### What it does:
 - Checks if the GitLab Runner repository is already added to your system.
@@ -28,9 +28,9 @@ This script registers a GitLab Runner to a specific GitLab instance.
 
 ### Usage:
 
-\`\`\`bash
+```bash
 ./register_gitlab_runner.sh <url>
-\`\`\`
+```
 
 Where \`<url>\` is the GitLab instance URL (e.g., \`https://gitlab.com/\`).
 
@@ -45,9 +45,9 @@ Where \`<url>\` is the GitLab instance URL (e.g., \`https://gitlab.com/\`).
 
 ### Example:
 
-\`\`\`bash
+```bash
 ./register_gitlab_runner.sh https://gitlab.com/
-\`\`\`
+```
 
 ## 3. `clean.sh`
 
@@ -55,9 +55,9 @@ This script stops, unregisters, and removes the GitLab Runner from your system.
 
 ### Usage:
 
-\`\`\`bash
+```bash
 ./clean.sh
-\`\`\`
+```
 
 ### What it does:
 - Stops the GitLab Runner service.
