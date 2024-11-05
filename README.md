@@ -2,7 +2,7 @@
 
 ### Team Members
 - Raibekov Dias
-- Aral
+- Askarov Aral
 - Rymkhanov Bekarys
 - Amangeldi Zhanserik
 - Tazhibayeva Aizada
