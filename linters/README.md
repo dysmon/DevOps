@@ -13,7 +13,7 @@ source path/to/venv/activator
 Second, ensure you have `pre-commit` and `flake8` installed in your virtual environment and required hooks:
 
 ```bash
-pip install pre-commit flake8 commitizen
+pip install pre-commit flake8 commitizen black
 ```
 ### 3. Install the Pre-Commit Hook
 
