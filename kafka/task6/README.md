@@ -67,19 +67,6 @@ done
 - **Purpose**: Ensures continuous message production to Kafka topics, even when brokers are randomly stopped.
 - **Execution**: The Go producer script (`main.go`) should be located in the `producer_consumer` directory.
 
-### 3. Script: Consumer Monitoring
-
-This script monitors and consumes messages from a Kafka topic using the Kafka console consumer.
-
-```bash
-#!/bin/bash
-
-docker exec -it kafka-1 kafka-console-consumer --bootstrap-server kafka-1:19092,kafka-2:19093,kafka-3:19094 --topic hi-topic --from-beginning
-```
-
-- **Purpose**: Verifies that messages are being consumed from the Kafka topic despite broker failures.
-- **Execution**: This script runs a Kafka console consumer inside the `kafka-1` container.
-
 ## Running the Solution
 
 1. **Stop Random Broker**: Run the first script in the background to stop a random broker every 15 minutes:
@@ -87,7 +74,7 @@ docker exec -it kafka-1 kafka-console-consumer --bootstrap-server kafka-1:19092,
    ./collapsing_nodes.sh &
    ```
 
-2. **Continuous Message Producer**: Run the monitoring script to continuously send and consume messages from Kafka topics:
+2. **Continuous Message Producer, Consumer**: Run the monitoring script to continuously send and consume messages from Kafka topics:
    ```bash
    ./monitoring.sh
    ```
