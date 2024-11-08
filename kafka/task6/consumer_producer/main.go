@@ -10,11 +10,8 @@ import (
 func main() {
 	config := sarama.NewConfig()
 
-	// Enable SASL authentication with PLAIN mechanism
-	config.Net.SASL.Enable = true
-	config.Net.SASL.Mechanism = sarama.SASLTypePlaintext
-	config.Net.SASL.User = "client"            // Replace with your SASL username
-	config.Net.SASL.Password = "client-secret" // Replace with your SASL password
+	// No SASL authentication
+	config.Net.SASL.Enable = false
 
 	config.Producer.Return.Successes = true
 
@@ -29,7 +26,7 @@ func main() {
 
 	message := &sarama.ProducerMessage{
 		Topic: "test-topic", // Replace with your topic name
-		Value: sarama.StringEncoder("Hello Kafka with SASL PLAIN!"),
+		Value: sarama.StringEncoder("Hello Kafka"),
 	}
 
 	partition, offset, err := producer.SendMessage(message)
@@ -54,5 +51,6 @@ func main() {
 	fmt.Println("Consuming messages from Kafka topic:")
 	for msg := range partitionConsumer.Messages() {
 		fmt.Printf("Received message: %s\n", string(msg.Value))
+		break
 	}
 }

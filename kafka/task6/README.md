@@ -11,13 +11,15 @@ This task involves implementing a disaster recovery solution for a Kafka cluster
 
 ## Overview
 
-The solution consists of three main scripts:
+The solution consists of two main scripts:
 
 1. **Stopping a random broker every 15 minutes**.
-2. **Continuously producing messages to Kafka topics**.
-3. **Monitoring and consuming messages from a Kafka topic**.
+2. **Monitoring producing and consuming messages from a Kafka topic**.
 
 ## Scripts
+
+## Notes
+- If two out of three nodes will fall down in quorum, the partitions can left without leader since majority votes (more than a half) needed for election of new leader
 
 ### 1. Script: Stop Random Broker
 
@@ -45,15 +47,15 @@ done
 - **Purpose**: Ensures that one of the brokers is stopped at random intervals to simulate broker failures for disaster recovery testing.
 - **Execution**: Run this script in the background to continuously stop a random broker.
 
-### 2. Script: Continuous Message Producer
+### 2. Script: Continuous Message Producer And Consumer
 
-This script runs a Go application that produces messages continuously to an existing Kafka topic.
+This script runs a Go application that produces and consumes messages continuously to an existing Kafka topic.
 
 ```bash
 #!/bin/bash
 
 # Navigate to the producer directory
-cd producer
+cd producer_consumer
 
 # Continuously produce messages
 while true; do
@@ -63,7 +65,7 @@ done
 ```
 
 - **Purpose**: Ensures continuous message production to Kafka topics, even when brokers are randomly stopped.
-- **Execution**: The Go producer script (`main.go`) should be located in the `producer` directory.
+- **Execution**: The Go producer script (`main.go`) should be located in the `producer_consumer` directory.
 
 ### 3. Script: Consumer Monitoring
 
@@ -82,25 +84,10 @@ docker exec -it kafka-1 kafka-console-consumer --bootstrap-server kafka-1:19092,
 
 1. **Stop Random Broker**: Run the first script in the background to stop a random broker every 15 minutes:
    ```bash
-   ./stop_random_broker.sh &
+   ./collapsing_nodes.sh &
    ```
 
-2. **Continuous Message Producer**: Run the producer script to continuously send messages to Kafka topics:
+2. **Continuous Message Producer**: Run the monitoring script to continuously send and consume messages from Kafka topics:
    ```bash
-   ./produce_continuous.sh &
+   ./monitoring.sh
    ```
-
-3. **Monitor Kafka Topic**: Use the consumer script to monitor and consume messages from a Kafka topic:
-   ```bash
-   ./monitor_consumer.sh
-   ```
-
-## Notes
-
-- The Kafka cluster runs in KRaft mode, which eliminates the need for ZooKeeper.
-- Ensure that all required services (Kafka, Docker, Go) are running properly before starting the scripts.
-- Modify the `kafka-console-consumer` command to match your Kafka topic name and bootstrap servers if needed.
-
-## Conclusion
-
-This disaster recovery solution tests Kafka's resilience by continuously stopping brokers and checking that message flow is not disrupted. The producer and consumer scripts validate Kafka's ability to handle broker failures while maintaining topic availability.
