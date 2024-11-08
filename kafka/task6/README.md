@@ -16,10 +16,10 @@ The solution consists of two main scripts:
 1. **Stopping a random broker every 15 minutes**.
 2. **Monitoring producing and consuming messages from a Kafka topic**.
 
-## Scripts
-
 ## Notes
 - If two out of three nodes will fall down in quorum, the partitions can left without leader since majority votes (more than a half) needed for election of new leader
+
+## Scripts
 
 ### 1. Script: Stop Random Broker
 
