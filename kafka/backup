@@ -1,0 +1,7 @@
+docker exec -it broker01 kafka-topics --create --bootstrap-server localhost:9092 --topic my-topic --partitions 3 --replication-factor 2 --command-config /tmp/client.properties  
+docker exec -it broker01 kafka-console-producer --bootstrap-server localhost:9092 localhost:9093 localhost:9094 --topic test-topic --producer.config /tmp/client.properties
+docker exec -it broker01 kafka-console-consumer --bootstrap-server localhost:9092 localhost:9093 localhost:9094 --topic test-topic --from-beginning --consumer.config /tmp/client.properties
+docker exec -it broker01 kafka-topics --list --bootstrap-server localhost:9092 --command-config /tmp/client.properties
+
+
+
