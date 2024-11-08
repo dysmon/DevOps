@@ -137,6 +137,3 @@ This command will show details of the `hi-topic`, including the partition distri
   Look for any error messages related to Zookeeper connection or broker startup issues.
   
 - Ensure that your advertised listeners are correctly configured, especially for external connections, and that your Docker network is set up correctly.
-
-## Conclusion
-You’ve successfully set up a Kafka cluster with three brokers and verified the distribution of topic partitions across the brokers. This setup can be scaled and adjusted to suit your needs for message streaming and distributed data management.

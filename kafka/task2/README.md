@@ -137,4 +137,6 @@ This code demonstrates both producing and consuming messages with SASL authentic
    ```
 
 2. Run Go app to verify messages in the topic.
-
+   ```bash
+   go run main.go
+   ```
