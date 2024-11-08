@@ -1,5 +1,5 @@
 
-# Task #6: Kafka Recovery - Disaster Recovery Solution
+# Kafka Recovery - Disaster Recovery Solution
 
 This task involves implementing a disaster recovery solution for a Kafka cluster running in KRaft mode. The solution includes scripts to randomly stop Kafka brokers at regular intervals while continuously producing and consuming messages to ensure system resilience.
 
