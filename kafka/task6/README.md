@@ -5,7 +5,7 @@ This task involves implementing a disaster recovery solution for a Kafka cluster
 
 ## Prerequisites
 
-- A Kafka cluster running three systemd-managed Kafka containers in KRaft mode. The Kafka setup can be found at [link](https://mygithub/something).
+- A Kafka cluster running three systemd-managed Kafka containers in KRaft mode. The Kafka setup can be found at [link](https://github.com/dysmon/DevOps/tree/main/kafka/task5).
 - Go language installed.
 - Docker installed and running.
 
