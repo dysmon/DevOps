@@ -50,8 +50,7 @@ curl -X POST http://medhelper.xyz/token \
 Method: GET
 Description: Validates an existing token and returns the associated scopes if valid.
 Headers:
-
-    Authorization (string, required): Bearer token, e.g., Authorization: Bearer <token>
+Authorization (string, required): Bearer token, e.g., Authorization: Bearer <token>
 
 Example Request:
 
@@ -91,4 +90,3 @@ curl -X GET http://medhelper.xyz/check \
 | Systemd          | Service management on Linux                   |
 | GitLab CI/CD     | Automated build, test, and deploy pipelines   |
 | Locust           | Load testing for performance validation       |
-| Shell Scripting  | Dependency initialization (`wait-for-it.sh`)  |
