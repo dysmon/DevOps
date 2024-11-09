@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./vault/role_id:/etc/vault/role_id:ro
+      - ./vault/secret_id:/etc/vault/secret_id:ro
+    expose:
+      - "8080"  
+    depends_on:
+      - db
+      - flyway-migrate 
+    environment:
+      - DB_CONNECTION=host=db port=5432 dbname=tokens user=postgres password=pass123
+      - TZ=UTC
+      - VAULT_ADDR=https://your-vault-server:8200
+    networks:
+      - app-network
+
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: tokens
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass123
+      TZ: UTC
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      retries: 5
+    networks:
+      - app-network
+    
+
+  flyway-clean:
+    image: flyway/flyway:latest
+    depends_on:
+      - db
+    entrypoint: ["flyway", "clean", "-url=jdbc:postgresql://db:5432/tokens", "-user=postgres", "-password=pass123", "-cleanDisabled=false"]
+    environment:
+      - FLYWAY_URL=jdbc:postgresql://db:5432/tokens
+      - FLYWAY_USER=postgres
+      - FLYWAY_PASSWORD=pass123
+    volumes:
+      - ./migrations:/flyway/sql
+    networks:
+      - app-network
+
+  flyway-migrate:
+    image: flyway/flyway:latest
+    depends_on:
+      - db
+      - flyway-clean
+    entrypoint: ["flyway", "migrate", "-baselineOnMigrate=true"]
+    environment:
+      - FLYWAY_URL=jdbc:postgresql://db:5432/tokens
+      - FLYWAY_USER=postgres
+      - FLYWAY_PASSWORD=pass123
+    volumes:
+      - ./migrations:/flyway/sql
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf  
+    ports:
+      - "80:80"  
+    depends_on:
+      - app
+    networks:
+      - app-network
+      
+
+networks:
+  app-network:
+
+volumes:
+  db_data:
+    
