@@ -1,0 +1,24 @@
+Error response from daemon: conflict: unable to delete 91ef0af61f39 (cannot be forced) - image is being used by running container 4bd0796f1efd
+./viper.sh: line 35: syntax error near unexpected token `}'
+./viper.sh: line 35: `}'
+./viper.sh: line 38: syntax error near unexpected token `}'
+./viper.sh: line 38: `}'
+./viper.sh: line 38: syntax error near unexpected token `}'
+./viper.sh: line 38: `}'
+./viper.sh: line 38: syntax error near unexpected token `}'
+./viper.sh: line 38: `}'
+./viper.sh: line 38: syntax error near unexpected token `}'
+./viper.sh: line 38: `}'
+./viper.sh: line 38: syntax error near unexpected token `}'
+./viper.sh: line 38: `}'
+./viper.sh: line 38: syntax error near unexpected token `}'
+./viper.sh: line 38: `}'
+./viper.sh: line 38: syntax error near unexpected token `}'
+./viper.sh: line 38: `}'
+./viper.sh: line 38: syntax error near unexpected token `}'
+./viper.sh: line 38: `}'
+LOG[INFO] Deleted image sha256:91ef0af61f39ece4d6710e465df5ed6ca12112358344fd51ae6a3b886634148b, Last used 1731249752, Current date Sun Nov 10 07:43:54 PM +05 2024
+./viper.sh: line 29: ssmpt: command not found
+LOG[INFO] Deleted image sha256:91ef0af61f39ece4d6710e465df5ed6ca12112358344fd51ae6a3b886634148b, Last used 1731250098, Current date Sun Nov 10 07:49:24 PM +05 2024
+
+LOG[INFO] Deleted image sha256:91ef0af61f39ece4d6710e465df5ed6ca12112358344fd51ae6a3b886634148b, Current date Sun Nov 10 08:02:04 PM +05 2024
