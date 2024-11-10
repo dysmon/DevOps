@@ -1,0 +1,13 @@
+[Unit]
+Description=Auth-Fortress DB Container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+RestartSec=5
+ExecStart=/usr/bin/docker start -a auth-fortress_db_1
+ExecStop=/usr/bin/docker stop auth-fortress_db_1
+
+[Install]
+WantedBy=multi-user.target
