@@ -1,0 +1,9 @@
+
+1)	Only changes with postresql.conf (Memory, CPU, max-connection)
+First test (adding 20 users every second until 1000). avg: 381 RPS, response time (95%): 1400ms, CPU: 50-80 %
+Second test (adding 50 users every second until 10000). Can't handle, 90% CPU usage at 2000 users
+2)	Using pgBouncer + postresql.conf
+First test (adding 20 users every second until 1000). avg: 512 RPS, response time (95%): 890ms, CPU: 30-40 %
+Second test (adding 50 users every second until 10000). Can't handle, 90% CPU usage at 3500 users
+3) Indexes didn’t help (the select statement still ~0.3s)
+4) Limit / Offset fast the query 20-30x times, but performance of load test not changed
