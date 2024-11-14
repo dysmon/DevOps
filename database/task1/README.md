@@ -18,7 +18,7 @@ BEGIN
     RETURN QUERY
     SELECT m.movie_id, m.title, m.genre, m.release_date
     FROM public.movie m
-    WHERE m.device_id = device_id
+    WHERE m.device_id = get_recommendations_by_device_id.device_id
       AND m.movie_id NOT IN (SELECT movie_id FROM public.reaction r WHERE r.device_id = device_id);
 END;
 $$ LANGUAGE plpgsql;
@@ -28,6 +28,17 @@ $$ LANGUAGE plpgsql;
 
 This function returns movie recommendations for a user based on their `user_id`, excluding movies that are listed in the `reaction` table.
 
+```sql
+CREATE FUNCTION get_recommendations_by_user_id(user_id INT) 
+RETURNS TABLE (movie_id INT, title VARCHAR, genre VARCHAR, release_date DATE) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT m.movie_id, m.title, m.genre, m.release_date
+    FROM public.movie m
+    WHERE m.user_id = get_recommendations_by_user_id.user_id
+      AND m.movie_id NOT IN (SELECT movie_id FROM public.reaction r WHERE r.device_id = device_id);
+END;
+$$ LANGUAGE plpgsql;
 ```
 
 ## Performance Optimization Approach
