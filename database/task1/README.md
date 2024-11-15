@@ -57,6 +57,8 @@ Initially, optimizations were focused on adjusting the PostgreSQL configuration 
 - **Second Test (10,000 users, 50 users/sec)**:
   - **Result**: Unable to handle the load, CPU usage reached 90% at 2000 users.
 
+![](./assets/first.png)
+
 ### 2. Implementing pgBouncer (Connection Pooling)
 
 To reduce the overhead of establishing new database connections, `pgBouncer` was introduced as a connection pooler.
@@ -70,6 +72,8 @@ To reduce the overhead of establishing new database connections, `pgBouncer` was
 
 - **Second Test (10,000 users, 50 users/sec)**:
   - **Result**: Unable to handle the load, CPU usage reached 90% at 3500 users.
+  
+![](./assets/second.png)
 
 ### 3. Indexing Strategy
 
