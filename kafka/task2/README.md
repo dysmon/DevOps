@@ -1,142 +1,204 @@
+# TASK1 of kafka
 
-# Kafka with SASL Authentication (PLAIN Mechanism)
+Configure Kafka to support either SASL or SSL for client-broker and inter-broker
+communication.
+Ensure that producers can send messages and consumers can receive them
+successfully.
+Examples of the configuration settings needed for clients (producers and
+consumers) to establish a secure connection
 
-## Overview
-
-This guide covers configuring Kafka to use SASL (Simple Authentication and Security Layer) for both client-broker and inter-broker communication. We use the PLAIN mechanism for SASL authentication, ensuring secure communication between Kafka clients and brokers, as well as between brokers in a Kafka cluster.
-
-## Prerequisites
-
-- Docker and Docker Compose installed.
-- Go installed (for testing the Kafka producer/consumer).
-- SASL credentials prepared (username and password for both brokers and clients).
-
-## Docker Compose Configuration
-
-This setup uses three Kafka brokers and a Zookeeper instance. Each Kafka broker is configured to communicate using SASL_PLAINTEXT.
-
-### Zookeeper Configuration
-
-Zookeeper is configured to use SASL authentication as well. The environment variable `KAFKA_OPTS` is set to reference a JAAS configuration file.
-
-```yaml
-version: '3.7'
-
-services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.3.0
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      KAFKA_OPTS: -Djava.security.auth.login.config=/etc/kafka/secrets/zookeeper_jaas.conf
-    volumes:
-      - ./zookeeper_jaas.conf:/etc/kafka/secrets/zookeeper_jaas.conf
-    ports:
-      - "2181:2181"
-```
-
-### Kafka Brokers Configuration
-
-Each broker is configured to support SASL for both internal (inter-broker) and external client communication. The `KAFKA_OPTS` environment variable points to the JAAS configuration file containing the SASL credentials.
-
-```yaml
-  kafka-1:
-    image: confluentinc/cp-kafka:7.3.0
-    container_name: broker01
-    ports:
-      - "9092:9092"
-      - "29092:29092"
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:19092,EXTERNAL://127.0.0.1:9092,DOCKER://host.docker.internal:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:SASL_PLAINTEXT,EXTERNAL:SASL_PLAINTEXT,DOCKER:SASL_PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_BROKER_ID: 1
-      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/secrets/broker_jaas.conf"
-      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
-      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
-    volumes:
-      - ./broker_jaas.conf:/etc/kafka/secrets/broker_jaas.conf
-```
-
-This configuration is repeated for `kafka-2` and `kafka-3` with appropriate port and listener changes.
-
-### JAAS Configuration Files
-
-For Zookeeper (`zookeeper_jaas.conf`):
-
-```bash
-Server {
-   org.apache.zookeeper.server.auth.DigestLoginModule required
-   user_super="adminsecret"
-   user_kafka="kafkasecret";
-};
-```
-
-For Kafka brokers (`broker_jaas.conf`):
-
-```bash
-KafkaServer {
-  org.apache.kafka.common.security.plain.PlainLoginModule required
-  username="broker"
-  password="broker-secret"
-  user_broker="broker-secret"
-  user_client="client-secret";
-};
-```
-
-## Testing with Go Producer/Consumer
-
-You can test the Kafka setup using a Go producer and consumer. The Go code uses the Sarama library with SASL authentication:
-
-```go
-package main
-
-import (
-	"fmt"
-	"log"
-	"github.com/IBM/sarama"
-)
-
-func main() {
-	config := sarama.NewConfig()
-	config.Net.SASL.Enable = true
-	config.Net.SASL.Mechanism = sarama.SASLTypePlaintext
-	config.Net.SASL.User = "client"
-	config.Net.SASL.Password = "client-secret"
-
-	brokerList := []string{"localhost:9092", "localhost:9093", "localhost:9094"}
-
-	producer, err := sarama.NewSyncProducer(brokerList, config)
-	if err != nil {
-		log.Fatalf("Error creating producer: %v", err)
-	}
-	defer producer.Close()
-
-	message := &sarama.ProducerMessage{
-		Topic: "test-topic",
-		Value: sarama.StringEncoder("Hello Kafka with SASL PLAIN!"),
-	}
-
-	partition, offset, err := producer.SendMessage(message)
-	if err != nil {
-		log.Fatalf("Error sending message: %v", err)
-	}
-
-	fmt.Printf("Message sent to partition %d with offset %d
-", partition, offset)
+```json
+{
+"sasl.username": "admin",
+"sasl.admin": "admin",
+"security.protocol": "SASL_SSL",
+"sasl.mechanism": "SCRAM-SHA-256",
+"ssl.ca.location": "/etc/ssl/certs/my.crt"
+}
+{
+"sasl.username": "admin",
+"sasl.admin": "admin",
+"security.protocol": "SASL_PLAINTEXT",
+"sasl.mechanism": "PLAIN"
 }
 ```
 
-This code demonstrates both producing and consuming messages with SASL authentication.
+Note – SASL_PLAINTEXT with PLAIN is easier to implement
 
-## Commands to Run
+## Instructions
 
-1. Start the services:
-   ```bash
-   docker-compose up -d
-   ```
+### 1. Add jaas.conf and configure them with username and password files for sasl
 
-2. Run Go app to verify messages in the topic.
-   ```bash
-   go run main.go
-   ```
+```bash
+cd config
+touch kafka-client-jaas.conf kafka-server-jaas.conf zookeeper-jaas.conf
+```
+
+and configure them
+
+```conf
+# kafka-client-jaas.conf
+KafkaClient {
+   	org.apache.kafka.common.security.plain.PlainLoginModule required
+	username="client_producer"
+	password="client-secret";
+};
+```
+
+```conf
+# kafka-server-jaas.conf
+KafkaServer {
+	org.apache.kafka.common.security.plain.PlainLoginModule required
+	username="admin"
+	password="admin-secret"
+	user_admin="admin-secret"
+	user_client_consumer="client-secret"
+	user_client_producer="client-secret";
+};
+```
+
+```conf
+# zookeeper-jaas.conf
+Server {
+	org.apache.zookeeper.server.auth.DigestLoginModule required
+	user_admin="admin-secret";
+};
+
+```
+
+and run one script that makes permanaent log dirs
+
+```bash
+sudo logs.sh
+```
+
+### 2. Change producer.properties and consumer.properties
+
+```properties
+# producer.properties
+bootstrap.servers=localhost:9092
+
+compression.type=none
+
+sasl.mechanism=PLAIN
+security.protocol=SASL_PLAINTEXT
+sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="client_producer" password="client-secret";
+
+```
+
+```properties
+# consumer.properties
+bootstrap.servers=localhost:9092
+
+
+sasl.mechanism=PLAIN
+security.protocol=SASL_PLAINTEXT
+sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="client_consumer" password="client-secret";
+
+
+# consumer group id
+group.id=test-consumer-group
+```
+
+### 3. configure brokers with sasl enabling
+
+```properties
+# broker1.properties
+broker.id=1
+log.dirs=/var/lib/kafka-logs-1
+listeners=SASL_PLAINTEXT://localhost:9092
+advertised.listeners=SASL_PLAINTEXT://localhost:9092
+security.inter.broker.protocol=SASL_PLAINTEXT
+sasl.mechanism.inter.broker.protocol=PLAIN
+sasl.enabled.mechanisms=PLAIN
+zookeeper.connect=localhost:2181
+
+######################################################
+
+# broker2.properties
+broker.id=2
+log.dirs=/var/lib/kafka-logs-2
+listeners=SASL_PLAINTEXT://localhost:9093
+advertised.listeners=SASL_PLAINTEXT://localhost:9093
+security.inter.broker.protocol=SASL_PLAINTEXT
+sasl.mechanism.inter.broker.protocol=PLAIN
+sasl.enabled.mechanisms=PLAIN
+zookeeper.connect=localhost:2181
+
+
+######################################################
+
+# broker3.properties
+broker.id=3
+log.dirs=/var/lib/kafka-logs-3
+listeners=SASL_PLAINTEXT://localhost:9094
+advertised.listeners=SASL_PLAINTEXT://localhost:9094
+security.inter.broker.protocol=SASL_PLAINTEXT
+sasl.mechanism.inter.broker.protocol=PLAIN
+sasl.enabled.mechanisms=PLAIN
+zookeeper.connect=localhost:2181
+
+```
+
+and in the beggining of bin/zookeeper-server-start.sh add
+
+```bash
+# zookeeper-server-start.sh
+export ZOOKEEPER_OPTS="-Djava.security.auth.login.config=$(pwd)/config/zookeeper-jaas.conf"
+
+```
+
+and for bin/kafka-server-start.sh
+
+```bash
+# kafka-server-start.sh
+export KAFKA_OPTS="-Djava.security.auth.login.config=$(pwd)/config/kafka-server-jaas.conf"
+
+```
+
+### 4. Start zookeeper and all brokers
+
+in different terminals run script
+
+```bash
+bin/zookeeper-server-start.sh config/zookeeper.properties //different terminal
+bin/kafka-server-start.sh config/broker1.properties //diff terminal
+bin/kafka-server-start.sh config/broker2.properties //diff terminal
+bin/kafka-server-start.sh config/broker3.properties //diff terminal
+```
+
+### 5. Create new topic
+
+create with name test-topic
+
+```bash
+bin/kafka-topics.sh   --create   --topic test   --bootstrap-server localhost:9092   --partitions 3   --replication-factor 2   --command-config config/producer.properties
+```
+
+and verify it
+
+```bash
+bin/kafka-topics.sh --describe --topic test --bootstrap-server localhost:9092 --command-config config/producer.properties
+```
+
+you can set wrong credentials for config/producer.properties and try to create and describe and see that authorization fails
+
+### 6. Producer Consumer message test
+
+make in 2 different terminals one consumer and one producer and connect to topic test-topic
+
+```bash
+bin/kafka-console-producer.sh --topic test --bootstrap-server localhost:9092 --producer.config config/producer.properties
+
+```
+
+```bash
+bin/kafka-console-consumer.sh --topic test --bootstrap-server localhost:9092 --consumer.config config/consumer.properties --from-beginning
+```
+
+and send some messages
+
+![img](../screenshots/task22.png)
+![img](../screenshots/task23.png)
+
+also you can change credentials in consumer.properties and producer.properties and try again

@@ -1,139 +1,109 @@
+# TASK1 of kafka
 
-# Kafka Cluster Setup with Three Brokers
+Set up and configure an Apache Kafka cluster comprising three brokers named
+broker01, broker02, and broker03. Ensure that the brokers start successfully and
+operate together as a unified cluster.
+Create topic with multiple partitions and verify the distribution of these partitions
+across the brokers.
 
-## Objective
-Set up and configure an Apache Kafka cluster with three brokers (`broker01`, `broker02`, `broker03`). Ensure that the brokers are correctly configured and can operate together as a unified cluster. Additionally, create a Kafka topic with multiple partitions and verify the distribution of these partitions across the brokers.
+## Instructions
 
-## Prerequisites
-- Docker and Docker Compose installed on the host machine.
+made a 3 brokers and 1 zookeeper to create topic and check their proper clusterization
 
-## Docker Compose Configuration
 
-This project uses Docker Compose to set up the Kafka cluster with three brokers, each running in a separate container. Additionally, a Zookeeper service is included for Kafka coordination.
-
-### Docker Compose File (`docker-compose.yml`)
-
-```yaml
-version: '3.7'
-
-services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.3.0
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_SERVER_ID: 1
-    ports:
-      - "2181:2181"
-
-  kafka-1:
-    image: confluentinc/cp-kafka:7.3.0
-    container_name: broker01
-    ports:
-      - "9092:9092"
-      - "29092:29092"
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:19092,EXTERNAL://127.0.0.1:9092,DOCKER://host.docker.internal:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,DOCKER:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_BROKER_ID: 1
-    depends_on:
-      - zookeeper
-
-  kafka-2:
-    image: confluentinc/cp-kafka:7.3.0
-    container_name: broker02
-    ports:
-      - "9093:9093"
-      - "29093:29093"
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:19093,EXTERNAL://127.0.0.1:9093,DOCKER://host.docker.internal:29093
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,DOCKER:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_BROKER_ID: 2
-    depends_on:
-      - zookeeper
-
-  kafka-3:
-    image: confluentinc/cp-kafka:7.3.0
-    container_name: broker03
-    ports:
-      - "9094:9094"
-      - "29094:29094"
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:19094,EXTERNAL://127.0.0.1:9094,DOCKER://host.docker.internal:29094
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,DOCKER:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_BROKER_ID: 3
-    depends_on:
-      - zookeeper
+### 1. Download Kafka and java
+download kafka and unzip it
+```
+tar -xvzf kafka_2.13-3.9.0.tgz
+cd kafka_2.13-3.9.0 // or name how you unzip it
+sudo apt install openjdk-17-jdk
+java -version
 ```
 
-### Services Overview
-1. **Zookeeper**: 
-   - Essential for managing Kafka brokers and their metadata. It runs on port `2181`.
-   
-2. **Kafka Brokers**:
-   - **broker01**: Exposes ports `9092` and `29092`.
-   - **broker02**: Exposes ports `9093` and `29093`.
-   - **broker03**: Exposes ports `9094` and `29094`.
-   
-Each Kafka broker is connected to Zookeeper and advertises internal, external, and Docker-specific listeners for proper communication.
+### 2. Create brokers and configure them
 
-## Setup Instructions
-
-### 1. Clone the repository
-If you haven’t already, clone the repository containing the `docker-compose.yml` file.
-
+create 3 brokers and configure them
 ```bash
-git clone <repository_url>
-cd <repository_folder>
+touch config/broker1.properties
+touch config/broker2.properties
+touch config/broker3.properties
 ```
+and after that we configure each broker
+```
+#config/broker1.properties
 
-### 2. Start the Kafka Cluster
-Run the following command to start all the services (Zookeeper and Kafka brokers):
+broker.id=1
+log.dirs=/tmp/kafka-logs-1
+listeners=PLAINTEXT://localhost:9092
 
+advertised.listeners=PLAINTEXT://localhost:9092
+zookeeper.connect=localhost:2181
+
+##################################################
+
+#config/broker2.properties
+
+broker.id=2
+log.dirs=/tmp/kafka-logs-2
+listeners=PLAINTEXT://localhost:9093
+
+advertised.listeners=PLAINTEXT://localhost:9093
+zookeeper.connect=localhost:2181
+
+
+##################################################
+
+#config/broker3.properties
+
+broker.id=3
+log.dirs=/tmp/kafka-logs-3
+listeners=PLAINTEXT://localhost:9094
+
+advertised.listeners=PLAINTEXT://localhost:9094
+zookeeper.connect=localhost:2181
+
+```
+### 3. Start zookeeper
+// check if zookeeper runs on 2181
 ```bash
-docker-compose up -d
+bin/zookeeper-server-start.sh config/zookeeper.properties
 ```
-
-This will start the Kafka brokers (`broker01`, `broker02`, `broker03`) and Zookeeper. The `-d` flag runs the containers in the background.
-
-### 3. Verify the Kafka Cluster
-Once the cluster is up and running, verify that all three Kafka brokers are operating and visible.
-
+### 4. Start all brokers
+in different terminals run script
 ```bash
-docker ps
+bin/kafka-server-start.sh config/broker1.properties //diff terminal
+bin/kafka-server-start.sh config/broker2.properties //diff terminal
+bin/kafka-server-start.sh config/broker3.properties //diff terminal
 ```
-
-You should see three Kafka brokers and the Zookeeper service running.
-
-### 4. Create a Kafka Topic with Multiple Partitions
-Use the following command to create a Kafka topic named `hi-topic` with 6 partitions and a replication factor of 3. The `--replication-factor 3` ensures that the topic has replicas across different brokers.
-
+### 5. Create new topic
+create with name test-topic
 ```bash
-docker exec -it broker01 kafka-topics --create --bootstrap-server localhost:19092 --replication-factor 3 --partitions 6 --topic hi-topic
+bin/kafka-topics.sh --create --topic test-topic --bootstrap-server localhost:9092 --partitions 3 --replication-factor 2
 ```
-
-### 5. Verify the Topic and Partition Distribution
-Once the topic is created, you can describe it to verify the distribution of partitions across brokers.
-
+and verify it
 ```bash
-docker exec -it broker01 kafka-topics --describe --bootstrap-server localhost:19092 --topic hi-topic
+bin/kafka-topics.sh --describe --topic test-topic --bootstrap-server localhost:9092
 ```
+### 6. Connect to he zookeeper and verify all configs of brokers
+```bash
+bin/zookeeper-shell.sh localhost:2181
+lc /brokers/topics
+lc /brokers/ids
+```
+![img](../screenshots/task11.png)
+it means that brokers are configured well and runned successfully
 
-This command will show details of the `hi-topic`, including the partition distribution across the brokers in the Kafka cluster.
 
-## Troubleshooting
+### 7. Producer Consumer message test
+make in 2 different terminals one consumer and one producer and connect to topic test-topic
+```bash
+bin/kafka-console-producer.sh --topic test-topic --bootstrap-server localhost:9092
+```
+```bash
+bin/kafka-console-consumer.sh --topic test-topic --from-beginning --bootstrap-server localhost:9092
+```
+and send some messages
 
-- If the brokers don’t start or communicate, check the Docker logs of each container using the following command:
-  
-  ```bash
-  docker logs <container_name>
-  ```
 
-  Look for any error messages related to Zookeeper connection or broker startup issues.
-  
-- Ensure that your advertised listeners are correctly configured, especially for external connections, and that your Docker network is set up correctly.
+![img](../screenshots/task12.png)
+![img](../screenshots/task13.png)
