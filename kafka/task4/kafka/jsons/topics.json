@@ -1,0 +1,22 @@
+[
+  {
+    "topic_name": "my_topic_1",
+    "partitions": 3,
+    "replication_factor": 2,
+    "delete_policy": "delete"
+  },
+  {
+    "topic_name": "my_topic_2",
+    "partitions": 5,
+    "replication_factor": 3,
+    "delete_policy": "compact"
+  },
+  {
+    "topic_name": "my_topic_3",
+    "partitions": 5,
+    "replication_factor": 3,
+    "delete_policy": "compact"
+  }
+]
+
+  

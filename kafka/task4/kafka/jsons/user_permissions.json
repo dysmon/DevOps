@@ -1,0 +1,7 @@
+[
+    {
+      "user": "client",
+      "topic_name": "my_topic_1",
+      "permissions": ["Read", "Write"]
+    }
+  ]

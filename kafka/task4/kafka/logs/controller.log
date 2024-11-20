@@ -1,0 +1,2 @@
+[2024-11-18 18:24:34,188] INFO [QuorumController id=1] Creating new QuorumController with clusterId QBHbRzoeRQWAEAvkSFpI0A. (org.apache.kafka.controller.QuorumController)
+[2024-11-18 18:24:35,486] INFO [QuorumController id=1] In the new epoch 1, the leader is (none). (org.apache.kafka.controller.QuorumController)

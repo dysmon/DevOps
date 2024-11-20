@@ -1,0 +1,73 @@
+image: eclipse-temurin:17-jdk
+
+stages:
+  - validate
+  - deploy
+  - cleanup
+
+variables:
+  KAFKA_HOME: "$CI_PROJECT_DIR"  
+  KAFKA_LOG_DIR: "/var/lib"  
+  KAFKA_BROKER_PORT: "9092"  
+  KAFKA_CONFIG_DIR: "$KAFKA_HOME/config"
+  KAFKA_BIN_DIR: "$KAFKA_HOME/bin"
+
+
+validate_and_start_kafka:
+  stage: validate
+  script:
+    - apt-get update
+    - apt-get install -y netcat-openbsd jq   
+    - find . -type f -iname "*.sh" -exec chmod +x {} \;
+
+    - echo "Create log dirs and formating with cluster id brokers."
+    - ./scripts/create_logs_dirs.sh
+    - ./scripts/generate-cluster-id-and-format.sh
+
+    - apt-get update
+    - apt-get install -y netcat-openbsd jq    
+
+    - echo "Starting Kafka servers..."
+    - ./scripts/start_kafka_servers.sh
+
+    - echo "Validating Kafka topic and user configuration files"
+    - ./scripts/check_kafka_availability.sh
+    - ./scripts/validate_kafka_config.sh
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - jsons/**/*
+
+deploy:
+  stage: deploy
+  script:
+    - apt-get update
+    - apt-get install -y netcat-openbsd jq   
+    - find . -type f -iname "*.sh" -exec chmod +x {} \;
+
+    - echo "Create log dirs and formating with cluster id brokers."
+    - ./scripts/create_logs_dirs.sh
+    - ./scripts/generate-cluster-id-and-format.sh
+
+    - echo "Starting Kafka servers..."
+    - ./scripts/start_kafka_servers.sh
+
+    - echo "Deploying Kafka topic and user permissions"
+    - ./scripts/check_kafka_availability.sh
+    - ./scripts/deploy_kafka_changes.sh
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - jsons/**/*
+
+cleanup:
+  stage: cleanup
+  script:
+    - find . -type f -iname "*.sh" -exec chmod +x {} \;
+    - echo "Stopping Kafka servers..."
+    - ./scripts/stop_kafka_servers.sh
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - jsons/**/*
+        
