@@ -97,3 +97,6 @@ git push origin "name"
 
 make merge request and see pipelines
 
+![img](../screenshots/task41.png)
+![img](../screenshots/task42.png)
+you can see that in deployement job it created 3 topics 1 deleted and aplied permissions with ACL
