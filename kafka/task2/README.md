@@ -1,4 +1,4 @@
-# TASK1 of kafka
+# TASK2 of kafka
 
 Configure Kafka to support either SASL or SSL for client-broker and inter-broker
 communication.

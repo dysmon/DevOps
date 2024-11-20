@@ -1,4 +1,4 @@
-# TASK1 of kafka
+# TASK3 of kafka
 
 Set up Kafka in Kraft mode, eliminating the need for Zookeeper. Ensure that Kafka
 operates as expected by creating topics and verifying that messages can be
