@@ -1,0 +1,62 @@
+#!/bin/bash
+
+MINIO_IMAGE="quay.io/minio/minio"
+WORKDIR="/home/dias/DevOps/minio/task1/"
+MINIO_ROOT_USER="minioadmin"
+MINIO_ROOT_PASSWORD="minioadmin"
+MINIO_NODES=(
+  "minio1:9001:9011:data1"
+  "minio2:9002:9012:data2"
+  "minio3:9003:9013:data3"
+)
+NETWORK_NAME="minio-cluster-net"
+CLUSTER_ENDPOINTS="http://minio1/data http://minio2/data http://minio3/data"
+
+create_network() {
+	docker network create $NETWORK_NAME 2>/dev/null || echo "Network $NETWORK_NAME already exists."
+}
+
+setup_systemd() {
+for NODE in "${MINIO_NODES[@]}"; do
+  IFS=":" read -r NAME PORT_HTTP PORT_CONSOLE DATA_DIR <<< "$NODE"
+  
+  SERVICE_FILE="/etc/systemd/system/$NAME.service"
+  
+  echo "Creating systemd service for $NAME..."
+  
+  cat <<EOF > "$SERVICE_FILE"
+[Unit]
+Description=MinIO Node $NAME
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+WorkingDirectory=$WORKDIR
+ExecStart=/usr/bin/docker run --rm --name $NAME --network $NETWORK_NAME \\
+  -p $PORT_HTTP:9000 -p $PORT_CONSOLE:9001 \\
+  -v $DATA_DIR:/data \\
+  -e MINIO_ROOT_USER=$MINIO_ROOT_USER \\
+  -e MINIO_ROOT_PASSWORD=$MINIO_ROOT_PASSWORD \\
+  $MINIO_IMAGE server $CLUSTER_ENDPOINTS --console-address ":9001"
+ExecStop=/usr/bin/docker stop $NAME
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+  echo "Reloading systemd daemon..."
+  systemctl daemon-reload
+
+  echo "Enabling and starting $NAME service..."
+  systemctl enable "$NAME"
+  systemctl start "$NAME"
+done
+
+echo "All MinIO nodes have been configured as systemd services."
+}
+
+# MAIN
+docker pull $MINIO_IMAGE
+create_network
+setup_systemd
