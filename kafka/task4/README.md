@@ -37,7 +37,7 @@ cd kafka
 git branch "name"
 git checkout "name"
 ```
-### 2. Changes
+### 3. Changes
 
 Change json files in dir `jsons/` to create the topic or delete it and manage permissions of users to some topic
 
@@ -74,7 +74,26 @@ and delete topic in `jsons/delete_topics.json`
     }
 ]
 ```
-and manage permissions with `json/user_permissions.json`
-```json
 
+and manage permissions with `json/user_permissions.json`
+
+```json
+[
+    {
+      "user": "client",
+      "topic_name": "my_topic_aizada",
+      "permissions": ["Read", "Write"]
+    }
+]
 ```
+
+### 4. Push and make merge request
+
+```bash
+git add .
+git commit -m "text"
+git push origin "name"
+```
+
+make merge request and see pipelines
+
