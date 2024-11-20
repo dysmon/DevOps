@@ -16,7 +16,7 @@ This script sets up a **distributed MinIO cluster** with 3 nodes using **Docker 
 ## Instructions
 
 ### 1. Clone or Copy the Script
-Download or copy the `minio_cluster_setup` script to your desired directory.
+Download or copy the `minio_setup` script to your desired directory.
 
 ### 2. Modify Configuration (Optional)
 Edit the script to configure:
@@ -38,7 +38,7 @@ MINIO_NODES=(
 Run the script to set up the distributed MinIO cluster:
 
 ```bash
-bash minio_cluster_setup.sh
+bash minio_setup
 ```
 
 This will:
