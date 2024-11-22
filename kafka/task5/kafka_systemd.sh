@@ -1,7 +1,7 @@
 #!/bin/bash
 
 KAFKA_DIR=$1
-CONFIG_DIR="$KAFKA_DIR/config"
+CONFIG_DIR="$KAFKA_DIR/config/kraft"
 SYSTEMD_DIR="/etc/systemd/system"
 
 create_service_file() {
