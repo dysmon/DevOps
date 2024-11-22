@@ -1,0 +1,43 @@
+#!/bin/bash
+
+RCLONE_CONFIG_PATH="$HOME/.config/rclone/rclone.conf"
+
+ACCESS_KEY="minioadmin"
+SECRET_KEY="minioadmin"
+ENDPOINT="http://localhost:9001"
+
+BUCKET_NAME="my-bucket"
+HOME_DIR="/home/dias"
+
+install_rclone() {
+	if ! command -v rclone &> /dev/null; then
+	  curl https://rclone.org/install.sh | sudo bash
+	fi
+}
+
+setup_rclone() {
+
+	mkdir -p "$(dirname "$RCLONE_CONFIG_PATH")"
+	touch "$RCLONE_CONFIG_PATH"
+
+	echo "[minio]
+type = s3
+provider = Minio
+env_auth = false
+access_key_id = $ACCESS_KEY
+secret_access_key = $SECRET_KEY
+endpoint = $ENDPOINT
+" > "$RCLONE_CONFIG_PATH"
+
+	echo "Configuration for '$REMOTE_NAME' added to $RCLONE_CONFIG_PATH"
+
+}
+
+add_crontab() {
+	(crontab -l 2>/dev/null; echo "* * * * * rclone sync $HOME_DIR/data/ minio:$BUCKET_NAME") | crontab -
+}
+
+# MAIN
+install_rclone
+setup_rclone
+add_crontab
