@@ -6,108 +6,107 @@ This project involves analyzing the current development process using Value Stre
 
 [Open the Task Map on Google Drive](https://drive.google.com/file/d/1Kb0PbeDtTPhFPjvW1sVT5LFaaIhUGDVF/view?usp=drive_link)
 
-## Project Context
-
-You are a manager of a development team with 9 developers. The team has struggled to complete tasks on time, and upper management has expressed dissatisfaction with consistent delays. This analysis aims to find the root causes of inefficiencies and propose actionable steps to optimize the process.
-
-## Goals
-
-- **Identify non-value-added activities (NVAT)**: Focus on reducing waiting times and rework to increase efficiency.
-- **Optimize Value-Added Time (VAT)**: Streamline the process to increase the percentage of time spent on productive, value-adding activities.
-- **Meet the weekly target of 10 tasks**: Adjust the cycle time to achieve the target of completing 10 tasks per week.
 
 ## Current State Analysis
 
-### Data Overview
-
-The following data describes the current cycle time, value-added time (VAT), rework, quality rate, and work-in-progress (WIP) at each process stage:
-
-| Stage            | Cycle Time (hours) | VAT (hours) | Rework (hours) | Employees | Quality Rate |
-|------------------|--------------------|-------------|----------------|-----------|--------------|
-| Analysis         | 30                 | 16          | 4              | 1         | 85%          |
-| System Design    | 40                 | 20          | 6              | 1         | 80%          |
-| Development      | 120                | 36          | 12             | 5         | 65%          |
-| Testing          | 50                 | 24          | 8              | 1         | 50%          |
-| Deployment       | 20                 | 16          | 4              | 1         | 90%          |
-
-### Total Cycle Time Without Rework: 260 hours  
-### Total Lead Time: 434 hours  
-### Total Rework Time: 34 hours  
-
-## Current State
-
 ### **Key Data**
-- **Processes:** Analysis, System Design, Development, Testing, Deployment
-- **Problems:**
-  - **High rework rates:** Development (12 hours), Testing (8 hours)
-  - **Low quality rates:** Testing (50%), Development (65%)
-  - **High Work-in-Progress (WIP):** Development (12 tasks), Testing (5 tasks)
-  - **Cycle Time:**
-    - Longest in Development (120 hours) and Testing (50 hours)
-
-### **Metrics**
-- **Total Lead Time (LT):** 400 hours (260 hours VAT + 34 hours rework + 140 hours buffer time)
-- **Process Efficiency:** 25.80%
-
-### **Identified Issues**
-1. **Rework Problems:**
-   - Testing and Development stages have the highest rework rates, causing delays.
-2. **Resource Allocation:**
-   - Development is overloaded (12 WIP) while other stages are underutilized.
-3. **Low Output Quality:**
-   - Testing and Development stages require significant quality improvements.
-4. **Waiting Times:**
-   - Excessive WIP leads to bottlenecks in Development and Testing.
-5. **Throughput:**
-   - Adjusted throughput is 0.8 tasks/week due to low quality and rework in key stages.
+| Process         | Cycle Time (hours) | VAT (hours) | Rework (hours) | Quality Rate (%) | WIP |
+|------------------|--------------------|-------------|----------------|------------------|-----|
+| **Analysis**     | 16                 | 16          | 2              | 80%              | 1   |
+| **System Design**| 40                 | 36          | 4              | 80%              | 2   |
+| **Development**  | 120                | 96          | 12             | 65%              | 12  |
+| **Testing**      | 50                 | 34          | 8              | 50%              | 5   |
+| **Deployment**   | 20                 | 16          | 4              | 90%              | 1   |
 
 ---
 
-## Future State
+### **Metrics**
+1. **Total Lead Time (LT):**  
+   - **260 hours VAT + 34 hours rework + 140 hours buffer = 434 hours**
 
-### **Proposed Improvements**
-1. **Increase Quality Rates:**
-   - Improve QR in:
-     - **System Design:** 80% → 90%
-     - **Development:** 65% → 85%
-     - **Testing:** 50% → 70%
-2. **Reallocate Resources:**
-   - Reduce the number of employees in Development from 5 to 4.
-   - Increase the number of employees in Testing from 1 to 2.
-3. **Reduce WIP:**
-   - **Development:** Decrease WIP from 12 to 10.
-   - **Testing:** Decrease WIP from 5 to 3.
-4. **Reduce Cycle Time:**
-   - Streamline processes in Development and Testing stages.
-   - Expected cycle time reduction of 20%.
+2. **Process Efficiency:**  
+   - **112 / 434 = 25.80%**
 
-### **Metrics After Changes**
-- **New Total Lead Time:** 224 hours + 34 hours rework + 122 hours buffer = 380 hours
-- **Process Efficiency:** 30% (+4.2%)
-- **Throughput:** 0.9 tasks/week.
+3. **Rework Analysis:**  
+   - **Development:** 12 hours → Largest contributor to rework.  
+   - **Testing:** 8 hours → Second highest rework.  
+
+4. **Quality Rates:**  
+   - Lowest in Testing (50%) and Development (65%).
+
+5. **Waiting Time Calculation:**  
+   - Waiting time = Cycle Time × (WIP - 1).  
+   - **Development:** 120 × (12 - 1) = 1,320 hours.  
+   - **Testing:** 50 × (5 - 1) = 200 hours.
+
+6. **Throughput:**  
+   - Adjusted throughput based on quality:  
+     - **Development:** 0.83 tasks/week.  
+     - **Testing:** 0.4 tasks/week.  
+
+---
+
+## Problems Identified
+1. **High Rework:**  
+   - Development and Testing stages require the most rework, leading to delays.
+2. **Low Quality Rates:**  
+   - Particularly in Testing (50%) and Development (65%).
+3. **Excessive WIP:**  
+   - Development has 12 tasks in progress, creating bottlenecks.
+4. **Low Process Efficiency:**  
+   - Only 25.80%, indicating significant waste in the process.
+5. **Cycle Time Delays:**  
+   - Long cycle times in Development (120 hours) and Testing (50 hours).
+
+---
+
+## Future State Proposal
+
+### **Key Changes**
+1. **Improve Quality Rates:**  
+   - System Design: **80% → 90%**  
+   - Development: **65% → 85%**  
+   - Testing: **50% → 70%**
+
+2. **Reduce WIP:**  
+   - Development: **12 → 10**  
+   - Testing: **5 → 3**
+
+3. **Reallocate Resources:**  
+   - Testing: Increase staff from 1 to 2 employees.  
+   - Development: Reduce staff from 5 to 4 employees.
+
+4. **Reduce Cycle Time:**  
+   - Optimize Development and Testing processes to lower cycle times.
+
+---
+
+### **New Metrics**
+1. **Total Lead Time (LT):**  
+   - **224 hours VAT + 34 hours rework + 122 hours buffer = 380 hours**
+
+2. **Process Efficiency:**  
+   - **112 / 380 = 30%**
+
+3. **Throughput Improvement:**  
+   - **System Design:** 0.9 tasks/week.  
+   - **Testing:** 0.6 tasks/week.  
 
 ---
 
 ## Recommendations
-
-1. **Improve Quality at Each Stage**
-   - Invest in training for developers and testers.
-   - Standardize processes and implement automated testing tools.
-2. **Optimize Resource Allocation**
-   - Allocate additional resources to the Testing stage to reduce bottlenecks.
-   - Adjust Development capacity to align with actual demand.
-3. **Streamline Workflows**
-   - Implement Agile practices, such as Kanban or Scrum, to reduce WIP and waiting times.
-   - Use CI/CD pipelines for continuous testing and deployment.
-4. **Automate Repetitive Tasks**
-   - Introduce automation for testing and deployment to reduce errors and improve efficiency.
-5. **Monitor Progress**
-   - Regularly measure quality rates, rework, and lead time to ensure sustainable improvements.
+1. **Automate Testing:**  
+   - Implement continuous testing to reduce manual errors and rework.
+2. **Adopt Agile Practices:**  
+   - Use Kanban to manage WIP and ensure smoother flow.
+3. **Focus on Training:**  
+   - Provide workshops to improve testing and development skills.
+4. **Monitor and Iterate:**  
+   - Regularly measure WIP, rework, and quality rates to track progress.
 
 ---
 
 ## Conclusion
-
-The proposed future state VSM significantly improves team efficiency and reduces delays. Implementing these improvements will help achieve sustainable productivity and meet business expectations.
+By addressing the bottlenecks and inefficiencies in Development and Testing stages, the proposed future state achieves a higher process efficiency (30%) and reduces lead time to 380 hours. This aligns the DevOps team for better throughput and sustainable productivity.
 
 ---
