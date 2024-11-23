@@ -12,11 +12,11 @@ This project involves analyzing the current development process using Value Stre
 ### **Key Data**
 | Process         | Cycle Time (hours) | VAT (hours) | Rework (hours) | Quality Rate (%) | WIP |
 |------------------|--------------------|-------------|----------------|------------------|-----|
-| **Analysis**     | 16                 | 16          | 2              | 80%              | 1   |
-| **System Design**| 40                 | 36          | 4              | 80%              | 2   |
-| **Development**  | 120                | 96          | 12             | 65%              | 12  |
-| **Testing**      | 50                 | 34          | 8              | 50%              | 5   |
-| **Deployment**   | 20                 | 16          | 4              | 90%              | 1   |
+| **Analysis**     | 30                 | 16          | 4              | 80%              | 8   |
+| **System Design**| 40                 | 20          | 6              | 80%              | 7   |
+| **Development**  | 120                | 36          | 12             | 65%              | 12  |
+| **Testing**      | 50                 | 24          | 8              | 50%              | 5   |
+| **Deployment**   | 20                 | 16          | 4              | 90%              | 3   |
 
 ---
 
@@ -35,14 +35,28 @@ This project involves analyzing the current development process using Value Stre
    - Lowest in Testing (50%) and Development (65%).
 
 5. **Waiting Time Calculation:**  
-   - Waiting time = Cycle Time × (WIP - 1).  
-   - **Development:** 120 × (12 - 1) = 1,320 hours.  
-   - **Testing:** 50 × (5 - 1) = 200 hours.
+   - Takt time = 40h/10 = 4 h/task
+   - Waiting time = 4 * WIP
 
-6. **Throughput:**  
-   - Adjusted throughput based on quality:  
-     - **Development:** 0.83 tasks/week.  
-     - **Testing:** 0.4 tasks/week.  
+6. **Throughput:**
+   Throughput = Available time (40 h) / Cycle time
+ 
+* Analysis: 40 / 30 = 1.33 
+* System design: 40 / 40 = 1
+* Development: 40 * 5 / 120 = 1.67
+* Testing: 40 / 50 = 0.8
+* Deployment: 40 / 20 = 2
+____________________________________
+
+7. **Adjusted Throughput(количество работы, которое команда может выполнить за 40 h) = Throughput * QR** 
+* Analysis: 1.33 * 0.85 = 1.13 task/week 
+* System design: 1 * 0.8 = 0.8 task/week
+* Development: 1.67 * 0.65 = 1.09 task/week
+* Testing: 0.8 * 0.5 = 0.4 task/week  <-(Bottleneck)
+* Deployment: 2 * 0.9 = 1.8 task/week
+ _________________________________________
+
+Throughput = 0.4 task/week (Testing)
 
 ---
 
@@ -62,21 +76,34 @@ This project involves analyzing the current development process using Value Stre
 
 ## Future State Proposal
 
+## Current State Analysis
+
+### **Key Data**
+| Process         | Cycle Time (hours) | VAT (hours) | Rework (hours) | Quality Rate (%) | WIP |
+|------------------|--------------------|-------------|----------------|------------------|-----|
+| **Analysis**     | 30                 | 16          | 4              | 85%              | 8   |
+| **System Design**| 34                 | 20          | 6              | 90%              | 7   |
+| **Development**  | 100                | 36          | 12             | 80%              | 12  |
+| **Testing**      | 40                 | 24          | 8              | 70%              | 5   |
+| **Deployment**   | 20                 | 16          | 4              | 90%              | 3   |
+
+
 ### **Key Changes**
 1. **Improve Quality Rates:**  
    - System Design: **80% → 90%**  
-   - Development: **65% → 85%**  
+   - Development: **65% → 80%**  
    - Testing: **50% → 70%**
 
-2. **Reduce WIP:**  
+2. **Reduce WIP:**
+   - System Design: **7 → 6**
    - Development: **12 → 10**  
    - Testing: **5 → 3**
 
-3. **Reallocate Resources:**  
+4. **Reallocate Resources:**  
    - Testing: Increase staff from 1 to 2 employees.  
    - Development: Reduce staff from 5 to 4 employees.
 
-4. **Reduce Cycle Time:**  
+5. **Reduce Cycle Time:**  
    - Optimize Development and Testing processes to lower cycle times.
 
 ---
@@ -87,10 +114,6 @@ This project involves analyzing the current development process using Value Stre
 
 2. **Process Efficiency:**  
    - **112 / 380 = 30%**
-
-3. **Throughput Improvement:**  
-   - **System Design:** 0.9 tasks/week.  
-   - **Testing:** 0.6 tasks/week.  
 
 ---
 
