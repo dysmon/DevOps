@@ -55,27 +55,27 @@ you can find all benchmark results in this exel sheet:
 
 ## Answers to questions
 
-### How did batch size affect throughput?
+### 1 How did batch size affect throughput?
 
 from the results we can see that batch size is not important for compression type `none` and only differs in other compression types.
 With the greater batch size compressions work better because they compress smaller number of times.
 but, Very large batch sizes can increase latency because the producer waits longer to accumulate messages before sending.
 
-### Which compression type gave the best performance and in which scenarious?
+### 2 Which compression type gave the best performance and in which scenarious?
 
+Zstd compression is supposedly the best option, with snappy being the best for low cpu usage, I think. Then lz4 and gzip are somewhere in the middle.
 
-
-### How did the producer mode impact throughput?
+### 3 How did the producer mode impact throughput?
 
 - Observation: asynchronous producer mode outperformed synchronous mode across all scenarios.
 - Reason: asynchronous mode allows multiple requests to be sent without waiting for acknowledgments, thus reducing latency and increasing throughput.
   
-### How did the consumer commit mode affect throughput?
+### 4 How did the consumer commit mode affect throughput?
 
 Asynchronous(auto.commit.enable=true) commit increases throughput due to reduced blocking and didnt require synchronous checks of data,witch is why it is fast but insecure for some services.
 synchronous commits for scenarios requiring exact message processing once (e.g., financial transactions).
 
-### How did the number of partitions impact performance?
+### 5 How did the number of partitions impact performance?
 
 - Increasing the number of `partitions` with `brokers` allows Kafka to leverage more parallelism, improving producer and consumer throughput.
     1. Too few partitions:
