@@ -49,9 +49,10 @@ enable.auto.commit=true // or false
 
 ## Analysis
 
-you can find all benchmark results in this exel sheet:
-
-<https://docs.google.com/spreadsheets/d/1tSItMuNsdZNwozy2iuL31rYx6CObhmUy4lW-6Z7ARYU/edit?gid=2072223237#gid=2072223237>
+you can find all benchmark results in this exel sheets:
+like batch_size.csv,compressors.csv etc.
+- note:
+   all tests was done with 1 million messages except consumer_mode benchmark
 
 ## Answers to questions
 
