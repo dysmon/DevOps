@@ -1,0 +1,4 @@
+Scenario,Batch Size,Compression Type,Producer Mode,Consumer Mode,Partitions,Throughput,LatencyAVG,LatencyMAX
+1,20000,gzip,sync,async,1,1333333.333333 records/sec (127.16 MB/sec), 0.59 ms avg latency, 118.00 ms max latency
+2,20000,gzip,sync,async,4,1176470.588235 records/sec (112.20 MB/sec), 1.34 ms avg latency, 125.00 ms max latency
+3,20000,gzip,sync,async,8,1102535.832415 records/sec (105.15 MB/sec), 6.36 ms avg latency, 125.00 ms max latency
