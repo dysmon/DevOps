@@ -4,7 +4,7 @@ This project involves analyzing the current development process using Value Stre
 
 ## Task Map
 
-[Open the Task Map on Google Drive]([https://drive.google.com/file/d/1Kb0PbeDtTPhFPjvW1sVT5LFaaIhUGDVF/view?usp=sharing](https://drive.google.com/file/d/1Kb0PbeDtTPhFPjvW1sVT5LFaaIhUGDVF/view?usp=drive_link))
+[Open the Task Map on Google Drive](https://drive.google.com/file/d/1Kb0PbeDtTPhFPjvW1sVT5LFaaIhUGDVF/view?usp=drive_link)
 
 ## Project Context
 
