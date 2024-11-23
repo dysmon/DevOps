@@ -12,7 +12,7 @@ This project involves analyzing the current development process using Value Stre
 ### **Key Data**
 | Process         | Cycle Time (hours) | VAT (hours) | Rework (hours) | Quality Rate (%) | WIP |
 |------------------|--------------------|-------------|----------------|------------------|-----|
-| **Analysis**     | 30                 | 16          | 4              | 80%              | 8   |
+| **Analysis**     | 30                 | 16          | 4              | 85%              | 8   |
 | **System Design**| 40                 | 20          | 6              | 80%              | 7   |
 | **Development**  | 120                | 36          | 12             | 65%              | 12  |
 | **Testing**      | 50                 | 24          | 8              | 50%              | 5   |
@@ -82,9 +82,9 @@ Throughput = 0.4 task/week (Testing)
 | Process         | Cycle Time (hours) | VAT (hours) | Rework (hours) | Quality Rate (%) | WIP |
 |------------------|--------------------|-------------|----------------|------------------|-----|
 | **Analysis**     | 30                 | 16          | 4              | 85%              | 8   |
-| **System Design**| 34                 | 20          | 6              | 90%              | 7   |
-| **Development**  | 100                | 36          | 12             | 80%              | 12  |
-| **Testing**      | 40                 | 24          | 8              | 70%              | 5   |
+| **System Design**| 34                 | 20          | 6              | 90%              | 6   |
+| **Development**  | 100                | 36          | 12             | 80%              | 10  |
+| **Testing**      | 40                 | 24          | 8              | 70%              | 3.5 |
 | **Deployment**   | 20                 | 16          | 4              | 90%              | 3   |
 
 
