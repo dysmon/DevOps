@@ -4,7 +4,7 @@ This project involves analyzing the current development process using Value Stre
 
 ## Task Map
 
-[Open the Task Map on Google Drive](https://drive.google.com/file/d/1Kb0PbeDtTPhFPjvW1sVT5LFaaIhUGDVF/view?usp=sharing)
+[Open the Task Map on Google Drive]([https://drive.google.com/file/d/1Kb0PbeDtTPhFPjvW1sVT5LFaaIhUGDVF/view?usp=sharing](https://drive.google.com/file/d/1Kb0PbeDtTPhFPjvW1sVT5LFaaIhUGDVF/view?usp=drive_link))
 
 ## Project Context
 
@@ -34,42 +34,80 @@ The following data describes the current cycle time, value-added time (VAT), rew
 ### Total Lead Time: 434 hours  
 ### Total Rework Time: 34 hours  
 
-## Key Findings
+## Current State
 
-1. **High Rework Times**: Rework consumes a significant portion of time at each stage, especially in Development (12 hours) and Testing (8 hours).
-2. **Low Quality Rates**: Stages like Testing (50%) and Development (65%) have low pass-through rates, causing bottlenecks and further rework.
-3. **Overloaded Stages**: Development, with 5 employees, requires the longest time and has a substantial rework component, creating delays.
+### **Key Data**
+- **Processes:** Analysis, System Design, Development, Testing, Deployment
+- **Problems:**
+  - **High rework rates:** Development (12 hours), Testing (8 hours)
+  - **Low quality rates:** Testing (50%), Development (65%)
+  - **High Work-in-Progress (WIP):** Development (12 tasks), Testing (5 tasks)
+  - **Cycle Time:**
+    - Longest in Development (120 hours) and Testing (50 hours)
 
-## Proposed Improvements (Future State)
+### **Metrics**
+- **Total Lead Time (LT):** 400 hours (260 hours VAT + 34 hours rework + 140 hours buffer time)
+- **Process Efficiency:** 25.80%
 
-To achieve the goal of completing 10 tasks per week, the following strategies are suggested:
+### **Identified Issues**
+1. **Rework Problems:**
+   - Testing and Development stages have the highest rework rates, causing delays.
+2. **Resource Allocation:**
+   - Development is overloaded (12 WIP) while other stages are underutilized.
+3. **Low Output Quality:**
+   - Testing and Development stages require significant quality improvements.
+4. **Waiting Times:**
+   - Excessive WIP leads to bottlenecks in Development and Testing.
+5. **Throughput:**
+   - Adjusted throughput is 0.8 tasks/week due to low quality and rework in key stages.
 
-1. **Reduce Rework by Improving Quality at Each Stage**:
-   - Implement automated testing to reduce manual errors.
-   - Establish clearer requirements and design reviews to reduce misunderstandings in Development.
+---
 
-2. **Streamline Process Flow and Reduce Waiting Times**:
-   - Parallelize tasks where possible to minimize delays between stages.
+## Future State
 
-3. **Optimize Resource Allocation**:
-   - Adjust employee assignments to alleviate bottlenecks, particularly at the Development and Testing stages.
+### **Proposed Improvements**
+1. **Increase Quality Rates:**
+   - Improve QR in:
+     - **System Design:** 80% → 90%
+     - **Development:** 65% → 85%
+     - **Testing:** 50% → 70%
+2. **Reallocate Resources:**
+   - Reduce the number of employees in Development from 5 to 4.
+   - Increase the number of employees in Testing from 1 to 2.
+3. **Reduce WIP:**
+   - **Development:** Decrease WIP from 12 to 10.
+   - **Testing:** Decrease WIP from 5 to 3.
+4. **Reduce Cycle Time:**
+   - Streamline processes in Development and Testing stages.
+   - Expected cycle time reduction of 20%.
 
-4. **Implement Continuous Improvement Practices**:
-   - Hold regular retrospectives to analyze rework causes and address inefficiencies iteratively.
+### **Metrics After Changes**
+- **New Total Lead Time:** 224 hours + 34 hours rework + 122 hours buffer = 380 hours
+- **Process Efficiency:** 30% (+4.2%)
+- **Throughput:** 0.9 tasks/week.
 
-### Target Metrics
+---
 
-- **Cycle Time per Task**: Aim to reduce from 260 hours to approximately 36 hours per task to meet the weekly target of 10 tasks.
-- **Rework Reduction**: Reduce rework by at least 50%, potentially saving up to 17 hours per task.
-  
-## Calculations
+## Recommendations
 
-To meet the goal of 10 tasks per week:
-- **Total Weekly Hours Available**: 9 developers * 40 hours = 360 hours
-- **Target Cycle Time per Task**: 360 hours / 10 tasks = 36 hours
+1. **Improve Quality at Each Stage**
+   - Invest in training for developers and testers.
+   - Standardize processes and implement automated testing tools.
+2. **Optimize Resource Allocation**
+   - Allocate additional resources to the Testing stage to reduce bottlenecks.
+   - Adjust Development capacity to align with actual demand.
+3. **Streamline Workflows**
+   - Implement Agile practices, such as Kanban or Scrum, to reduce WIP and waiting times.
+   - Use CI/CD pipelines for continuous testing and deployment.
+4. **Automate Repetitive Tasks**
+   - Introduce automation for testing and deployment to reduce errors and improve efficiency.
+5. **Monitor Progress**
+   - Regularly measure quality rates, rework, and lead time to ensure sustainable improvements.
 
-## Future Enhancements
+---
 
-- Automate data collection for each process stage to track ongoing improvements.
-- Continue to adjust resources based on process bottlenecks.
-- Develop dashboards to visualize cycle time, rework, and VAT metrics in real-time.
+## Conclusion
+
+The proposed future state VSM significantly improves team efficiency and reduces delays. Implementing these improvements will help achieve sustainable productivity and meet business expectations.
+
+---
