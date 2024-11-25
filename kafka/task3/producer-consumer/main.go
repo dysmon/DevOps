@@ -1,23 +1,23 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"log"
-
 	"github.com/IBM/sarama"
+	"log"
+	"time"
 )
 
 func main() {
 	config := sarama.NewConfig()
 
-	// No SASL authentication
 	config.Net.SASL.Enable = false
 
 	config.Producer.Return.Successes = true
 
-	// Set the Kafka broker addresses (replace with your broker addresses)
 	brokerList := []string{"localhost:9092", "localhost:9093", "localhost:9094"}
 
+	// Produce message
 	producer, err := sarama.NewSyncProducer(brokerList, config)
 	if err != nil {
 		log.Fatalf("Error creating producer: %v", err)
@@ -25,7 +25,7 @@ func main() {
 	defer producer.Close()
 
 	message := &sarama.ProducerMessage{
-		Topic: "test-topic", // Replace with your topic name
+		Topic: "test-topic",
 		Value: sarama.StringEncoder("Hello Kafka"),
 	}
 
@@ -36,6 +36,7 @@ func main() {
 
 	fmt.Printf("Message sent to partition %d with offset %d\n", partition, offset)
 
+	// Consume message
 	consumer, err := sarama.NewConsumer(brokerList, config)
 	if err != nil {
 		log.Fatalf("Error creating consumer: %v", err)
@@ -48,8 +49,16 @@ func main() {
 	}
 	defer partitionConsumer.Close()
 
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
 	fmt.Println("Consuming messages from Kafka topic:")
-	for msg := range partitionConsumer.Messages() {
-		fmt.Printf("Received message: %s\n", string(msg.Value))
+	for {
+		select {
+		case msg := <-partitionConsumer.Messages():
+			fmt.Printf("Received message: %s\n", string(msg.Value))
+		case <-ctx.Done():
+			return
+		}
 	}
 }

@@ -3,7 +3,7 @@ version: '3.7'
 services:
   kafka-1:
     image: confluentinc/cp-kafka:7.7.0
-    container_name: broker01
+    container_name: kafka-1
     ports:
       - "9092:9092"
       - "29092:29092"
@@ -21,7 +21,7 @@ services:
 
   kafka-2:
     image: confluentinc/cp-kafka:7.7.0
-    container_name: broker02
+    container_name: kafka-2
     ports:
       - "9093:9093"
       - "29093:29093"
@@ -39,7 +39,7 @@ services:
 
   kafka-3:
     image: confluentinc/cp-kafka:7.7.0
-    container_name: broker03
+    container_name: kafka-3
     ports:
       - "9094:9094"
       - "29094:29094"

@@ -24,6 +24,8 @@ CLUSTER_ID="MkU3OEVBNTcwNTJENDM2Qk"
 # Create the systemd unit file for this broker
 SYSTEMD_FILE="/etc/systemd/system/kafka-broker-$BROKER_ID.service"
 
+docker pull $KAFKA_IMAGE
+
 echo /usr/bin/docker run --name $KAFKA_CONTAINER_NAME --network $DOCKER_NETWORK \
   -e KAFKA_PROCESS_ROLES="broker,controller" \
   -e KAFKA_LISTENERS="$KAFKA_LISTENERS" \

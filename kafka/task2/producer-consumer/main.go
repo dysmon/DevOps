@@ -10,15 +10,13 @@ import (
 func main() {
 	config := sarama.NewConfig()
 
-	// Enable SASL authentication with PLAIN mechanism
 	config.Net.SASL.Enable = true
 	config.Net.SASL.Mechanism = sarama.SASLTypePlaintext
-	config.Net.SASL.User = "broker"            // Replace with your SASL username
-	config.Net.SASL.Password = "broker-secret" // Replace with your SASL password
+	config.Net.SASL.User = "broker"
+	config.Net.SASL.Password = "broker-secret"
 
 	config.Producer.Return.Successes = true
 
-	// Set the Kafka broker addresses (replace with your broker addresses)
 	brokerList := []string{"localhost:9092", "localhost:9093", "localhost:9094"}
 
 	producer, err := sarama.NewSyncProducer(brokerList, config)
@@ -28,7 +26,7 @@ func main() {
 	defer producer.Close()
 
 	message := &sarama.ProducerMessage{
-		Topic: "test-topic", // Replace with your topic name
+		Topic: "test-topic",
 		Value: sarama.StringEncoder("Hello Kafka with SASL PLAIN!"),
 	}
 
