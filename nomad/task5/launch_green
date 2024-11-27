@@ -1,0 +1,1 @@
+docker run --network host -d --name app_green -e PORT=8082 diasraibek/nomad_fastapi:latest

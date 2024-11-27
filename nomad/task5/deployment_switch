@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ "$1" == "blue" ]; then
+  sed -i 's|proxy_pass http://app_green;|proxy_pass http://app_blue;|' /etc/nginx/conf.d/blue-green.conf
+elif [ "$1" == "green" ]; then
+  sed -i 's|proxy_pass http://app_blue;|proxy_pass http://app_green;|' /etc/nginx/conf.d/blue-green.conf
+else
+  echo "Usage: $0 <blue|green>"
+  exit 1
+fi
+
+sudo nginx -s reload
+echo "Switched to $1 environment"
+

@@ -1,0 +1,1 @@
+docker run --network host -d --name app_blue -e PORT=8081 diasraibek/nomad_fastapi:1.1
