@@ -1,1 +1,1 @@
-https://gitlab.com/group3213239j/flyway
+https://gitlab.com/bekonRymkhanov/monorepo
