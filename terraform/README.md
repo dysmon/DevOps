@@ -66,7 +66,6 @@ terraform/
    Create or update the terraform.tfvars file with your specific values:
 
    ```bash
-    terraform.tfvars
 
     do_token = "your_digitalocean_api_token_here"
 
