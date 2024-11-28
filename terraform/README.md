@@ -20,6 +20,12 @@ Before you begin, ensure you have the following installed and configured:
     ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
     ```
 
+    and get key
+
+    ```bash
+    cat ~/.ssh/id_rsa.pub
+    ```
+
     This creates a public key (~/.ssh/id_rsa.pub) and a private key (~/.ssh/id_rsa).
 
 ## Project Structure
