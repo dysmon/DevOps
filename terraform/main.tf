@@ -35,7 +35,7 @@ resource "digitalocean_droplet" "web" {
 }
 
 data "digitalocean_droplet" "example" {
-  name = "web-1"
+  name = digitalocean_droplet.web.name
 }
 
 output "droplet_output" {
