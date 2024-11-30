@@ -7,7 +7,7 @@ register_runner() {
 	sudo gitlab-runner register \
 	  --non-interactive \
 	  --url "https://gitlab.com/" \
-	  --token "$RUNNER_TOKEN" \	
+	  --token "$RUNNER_TOKEN" \
 	  --executor "shell" \
 	  --description "gitlab-runner"
 	  # --tag-list "shared" after updates it's impossible to do without premium gitlab
