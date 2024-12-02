@@ -1,0 +1,14 @@
+- name: Play for creating users
+  hosts: web-server
+  become: true
+  tasks:
+    - name: Creating user '{{ item }}'
+      ansible.builtin.user:
+        name: '{{ item }}'
+        create_home: true
+        state: present
+        generate_ssh_key: true
+      loop:
+        - john
+        - james
+        - johan

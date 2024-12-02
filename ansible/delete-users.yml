@@ -1,0 +1,14 @@
+- name: Play for deleting users
+  hosts: web-server
+  become: true
+  tasks:
+    - name: Deleting user - '{{ item }}'
+      ansible.builtin.user:
+        name: '{{ item }}'
+        state: absent
+        remove: true
+      when: item != ansible_user
+      loop:
+        - john
+        - james
+        - johan
