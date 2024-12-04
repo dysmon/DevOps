@@ -1,0 +1,5 @@
+- name: Install and Configure apps
+  hosts: web-server
+  become: true
+  roles:
+    - role: nomad

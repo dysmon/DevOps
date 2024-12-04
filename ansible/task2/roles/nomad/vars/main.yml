@@ -1,0 +1,10 @@
+nomad_data_dir: "/opt/nomad"
+nomad_bind_addr: "0.0.0.0"
+nomad_log_level: "INFO"
+nomad_datacenter: "kbtu"
+nomad_server: true
+nomad_client: true
+nomad_bootstrap_expect: 1
+nomad_docker_allow_privileged: true 
+nomad_servers:
+  - "127.0.0.1:4646"

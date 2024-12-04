@@ -1,0 +1,57 @@
+- name: Install Nomad
+  ansible.builtin.get_url:
+    url: "https://releases.hashicorp.com/nomad/{{ nomad_version }}/nomad_{{ nomad_version }}_linux_amd64.zip"
+    dest: "/tmp/nomad.zip"
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "RedHat"
+
+- name: Unzip Nomad
+  ansible.builtin.unarchive:
+    src: "/tmp/nomad.zip"
+    dest: "/usr/local/bin/"
+    owner: root
+    group: root
+    remote_src: true
+    
+- name: Create Nomad system user
+  ansible.builtin.user:
+    name: "nomad"
+    shell: "/bin/false"
+    home: "/etc/nomad.d"
+    system: true
+    create_home: false
+
+- name: Create Nomad directories
+  ansible.builtin.file:
+    path: "{{ nomad_data_dir }}"
+    state: directory
+    owner: nomad
+    group: nomad
+    mode: '0755'
+
+- name: Generate Nomad configuration
+  ansible.builtin.template:
+    src: "nomad.hcl.j2"
+    dest: "/etc/nomad.d/nomad.hcl"
+    owner: nomad
+    group: nomad
+    mode: '0644'
+  notify:
+    - Restart Nomad
+
+- name: Copy Nomad systemd service file
+  ansible.builtin.copy:
+    src: "nomad.service"
+    dest: "/etc/systemd/system/nomad.service"
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - Restart Nomad
+
+- name: Start and enable Nomad service
+  ansible.builtin.systemd:
+    name: nomad
+    enabled: true
+    state: started
+  notify:
+    - Restart Nomad

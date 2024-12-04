@@ -1,0 +1,8 @@
+nomad_version: "1.9.2"
+nomad_data_dir: "/var/lib/nomad"
+nomad_bind_addr: "0.0.0.0"
+nomad_log_level: "INFO"
+nomad_datacenter: "dc1"
+nomad_server: false
+nomad_bootstrap_expect: 1
+nomad_client: true
