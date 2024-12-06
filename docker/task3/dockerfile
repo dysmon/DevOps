@@ -1,0 +1,26 @@
+FROM docker:27.3.1-dind-alpine3.20
+
+ENV GITLAB_SOURCE="https://gitlab.com"
+ENV PROJECT_GROUP="98283240"
+ENV GITLAB_ACCESS_TOKEN="glpat-jj2bWyH6EVc2Vo-YqrUi"
+
+RUN apk update && \
+    apk add --update alpine-sdk \
+    sudo \
+    jq \
+    git \
+    curl \
+    wget \
+    unzip \
+    bash
+
+
+RUN sudo curl -L --output /usr/local/bin/gitlab-runner "https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64"
+RUN sudo chmod +x /usr/local/bin/gitlab-runner
+RUN echo "GitLab Runner installed."
+
+COPY ./container_files /container_files
+RUN chmod -R 755 /container_files
+
+
+ENTRYPOINT ["/bin/bash", "/container_files/register_gitlab_runner.sh"]

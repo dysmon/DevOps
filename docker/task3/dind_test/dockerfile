@@ -1,0 +1,6 @@
+FROM alpine:3.18
+
+RUN apk update 
+
+CMD ["echo", "HELLO WORLD"]
+

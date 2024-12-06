@@ -33,4 +33,4 @@ repos:
     -   id: commitizen
         stages: [commit-msg]
 
-exclude: 'bekavenv/.*|.pre-commit-config.yaml|\.git_backup|README.md'
+exclude: 'lintersenv/.*|.pre-commit-config.yaml|\.git_backup|README.md|screanshots/.*'

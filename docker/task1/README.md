@@ -3,11 +3,12 @@
 
 This project demonstrates how to install and run the old version of the Opera browser (11.50) in a Docker container based on Ubuntu 16.04.
 
-### Prerequisites
+## Prerequisites
 
 Before running the container, ensure you have the following prerequisites:
 
 1. **X11 Permissions**: Allow the Docker container to connect to the X server by running:
+
    ```bash
    xhost +local:docker
    ```
@@ -54,5 +55,3 @@ To run the Opera browser in the Docker container, use the following command:
 ```bash
 docker run -it --rm -e DISPLAY=$DISPLAY --network host old_opera
 ```
-
-
