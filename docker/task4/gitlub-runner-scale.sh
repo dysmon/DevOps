@@ -7,21 +7,15 @@ GITLAB_URL="https://gitlab.com"
 PROJECT_GROUP="98283240"                        
 GITLAB_ACCESS_TOKEN="glpat-jj2bWyH6EVc2Vo-YqrUi"  
 RUNNER_IMAGE="docker-runner5"   
-MIN_RUNNERS=1
+MIN_RUNNERS=0
 MAX_RUNNERS=5
 
-# Log file location
 LOG_FILE="/var/log/gitlab-runner-scaler.log"
-
-# ------------------------------
-# Helper Functions
-# ------------------------------
-
 log() {
   echo "$(date '+%Y-%m-%d %H:%M:%S') - $*" | tee -a "$LOG_FILE"
 }
 
-# Function to get current project IDs in the group
+#project IDs in the group
 get_current_projects_ids() {
   log "Fetching current project IDs..."
   local response
@@ -38,14 +32,14 @@ get_current_projects_ids() {
   log "Projects: ${projects[@]}"
 }
 
-# Function to get the current number of active runners
+#current number of active runners
 get_current_active_runners() {
   log "Fetching current active runners..."
   current_runners=$(docker container ls --filter "ancestor=$RUNNER_IMAGE" --format "{{.ID}}" | wc -l)
   log "Current active runners: $current_runners"
 }
 
-# Function to get the total number of pending jobs across all projects
+#number of pending jobs across all projects
 get_pending_jobs() {
   pending_jobs_all=0
   log "Calculating pending jobs..."
@@ -59,7 +53,7 @@ get_pending_jobs() {
   log "Total pending jobs: $pending_jobs_all"
 }
 
-# Function to get the total number of running jobs and their runner IDs
+#get number of running jobs and their runner IDs
 get_running_jobs() {
   running_jobs_all=0
   running_jobs_runners_ids=()
@@ -83,46 +77,40 @@ get_running_jobs() {
   log "Total running jobs: $running_jobs_all"
 }
 
-# Function to register a new runner
+#register a new runner
 run_new_runner() {
   response=$(curl -X"POST" --header "PRIVATE-TOKEN: $GITLAB_ACCESS_TOKEN" --data "runner_type=group_type&group_id=$PROJECT_GROUP" "$GITLAB_URL/api/v4/user/runners")
   token=$(echo "$response" | jq -r .token)
   runner_id=$(echo "$response" | jq -r .id)
 
   docker run --rm -d --name gitlab-runner-$runner_id --privileged $RUNNER_IMAGE
-}
 
-
-# Function to stop and deregister a runner
-stop_runner() {
-  local container_name=$1
-  local runner_id=$2
-
-  log "Stopping and removing runner $runner_id (Container: $container_name)..."
-  
-  if docker container inspect "$container_name" > /dev/null 2>&1; then
-    docker container stop "$container_name" || log "Container $container_name already stopped."
-    docker container rm "$container_name" || log "Container $container_name already removed."
-  else
-    log "Container $container_name does not exist."
-  fi
-
-  # Deregister the runner from GitLab
   response=$(curl -s --request DELETE --header "PRIVATE-TOKEN: $GITLAB_ACCESS_TOKEN" \
     "$GITLAB_URL/api/v4/runners/$runner_id")
 
-  if [ "$response" == "" ]; then
-    log "Successfully deregistered runner $runner_id."
-  else
-    log "Failed to deregister runner $runner_id. Response: $response"
-  fi
 }
 
-# Function to manage scaling
+#stop
+stop_runner() {
+  for container_id in $(docker container ls --filter=ancestor=$RUNNER_IMAGE --format "{{.Names}}"); do
+    container_runner_id=$(echo $container_id | cut -d'-' -f3)
+    if [[ ! " ${running_jobs_runners_ids[*]} " =~ "$container_runner_id" ]]; then
+      
+      # docker exec -it $container_id sh -c "gitlab-runner unregister --token \$(awk -F'=' '/token =/ { gsub(/\"/,\"\",\$2); print \$2 }' /etc/gitlab-runner/config.toml)"
+      docker exec -it $container_id sh -c "curl -s --request DELETE \
+        --header 'PRIVATE-TOKEN: glpat-jj2bWyH6EVc2Vo-YqrUi' \
+        \"https://gitlab.com/api/v4/runners/\$(awk -F'=' '/id =/ { gsub(/[^0-9]/,\"\",\$2); print \$2 }' /etc/gitlab-runner/config.toml)\""
+      docker container stop $container_id
+    fi
+  done
+}
+
+
+############################################
+
 manage_scaling() {
   log "Managing scaling..."
 
-  # Register minimum runners if current runners are less than MIN_RUNNERS
   if [ "$current_runners" -lt "$MIN_RUNNERS" ]; then
     runners_to_add=$((MIN_RUNNERS - current_runners))
     log "Adding $runners_to_add runner(s) to reach minimum of $MIN_RUNNERS."
@@ -137,48 +125,29 @@ manage_scaling() {
     done
   fi
 
-  # Scale up based on pending jobs
-  if [ "$pending_jobs_all" -gt 0 ]; then
-    log "Scaling up based on pending jobs..."
-    for _ in $(seq 1 "$pending_jobs_all"); do
-      if [ "$current_runners" -lt "$MAX_RUNNERS" ]; then
-        run_new_runner
-        log "New runner started."
-        current_runners=$((current_runners + 1))
-      else
-        log "Maximum number of runners ($MAX_RUNNERS) reached."
-        break
-      fi
-    done
-  fi
 
-  # Scale down if possible
-  if [ "$running_jobs_all" -lt "$current_runners" ]; then
-    runners_to_remove=$((current_runners - $running_jobs_all))
-    log "Scaling down: removing $runners_to_remove runner(s)."
-    for _ in $(seq 1 "$runners_to_remove"); do
-      if [ "$current_runners" -gt "$MIN_RUNNERS" ]; then
-        # Identify runners not handling any running jobs
-        for container_id in $(docker container ls --filter "ancestor=$RUNNER_IMAGE" --format "{{.Names}}"); do
-          container_runner_id=$(echo "$container_id" | cut -d'-' -f3)
-          if [[ ! " ${running_jobs_runners_ids[@]} " =~ " $container_runner_id " ]]; then
-            stop_runner "$container_id" "$container_runner_id"
-            current_runners=$((current_runners - 1))
-            break
-          fi
-        done
-      else
-        log "Minimum number of runners ($MIN_RUNNERS) reached."
-        break
-      fi
-    done
-  fi
+if [ $pending_jobs_all -gt 0 ]; then
+  for i in $(seq 1 $pending_jobs_all); do
+    if [ $current_runners -lt $MAX_RUNNERS ]; then
+      run_new_runner
+      echo "New runner started"
+      current_runners=$(($current_runners+1))
+    fi
+  done
+elif [ $(($running_jobs_all - $current_runners)) -lt 0 ]; then
+  for i in $(seq 1 $(($current_runners - $running_jobs_all))); do
+    if [ $current_runners -gt $MIN_RUNNERS ]; then
+      stop_runner
+      echo "Runner stopped"
+      current_runners=$(($current_runners-1))
+    fi
+  done
+fi
 }
 
 
-# ------------------------------
-# Main Execution Flow
-# ------------------------------
+##########################################################
+
 
 log "GitLab Runner Scaler Service started at $(date)"
 

@@ -16,7 +16,7 @@ access_token=$GITLAB_ACCESS_TOKEN
 project_group=$PROJECT_GROUP
 
 
-# Register GitLab Runner
+
 echo "Registering GitLab Runner..."
 echo "Link: $link"
 echo "Access Token: $access_token"
@@ -49,6 +49,5 @@ else
   exit 1
 fi
 
-# Run GitLab Runner
 echo "Starting GitLab Runner..."
 gitlab-runner run
