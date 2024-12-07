@@ -1,4 +1,4 @@
-ansible_host: 192.168.17.43
+ansible_host: 192.168.236.43
 ansible_connection: ssh
 ansible_user: dias
 ansible_become_password: abcd
